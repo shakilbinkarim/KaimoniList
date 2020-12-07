@@ -58,4 +58,20 @@ class ShoppingItemDaoTest {
         assertThat(allShoppingItems).doesNotContain(shoppingItem)
     }
 
+    @ExperimentalCoroutinesApi
+    @Test
+    fun viewTotalPrice() = runBlockingTest {
+        val slipperUnitPrice = 100f
+        val slipperQty = 3
+        val appleUnitPrice = 200f
+        val appleQty = 2
+        val shoppingItem1 = ShoppingItem("Slippers", slipperQty, slipperUnitPrice, "unavailable", 2)
+        val shoppingItem2 = ShoppingItem("Apples", appleQty, appleUnitPrice, "unavailable", 3)
+        dao.insertShoppingItem(shoppingItem1)
+        dao.insertShoppingItem(shoppingItem2)
+        val result = dao.viewTotalPrice().getOrAwaitValue()
+        val expectedPrice = (slipperUnitPrice * slipperQty) + (appleUnitPrice * appleQty)
+        assertThat(result).isEqualTo(expectedPrice)
+    }
+
 }
