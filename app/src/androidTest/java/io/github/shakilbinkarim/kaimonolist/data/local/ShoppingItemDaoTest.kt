@@ -43,8 +43,8 @@ class ShoppingItemDaoTest {
     @Test
     fun insertShoppingItem() = runBlockingTest {
         val shoppingItem = ShoppingItem("fish", 1, 300f, "unavailable", 1)
-        dao.insertShoppingItem(shoppingItem)
-        val allShoppingItems = dao.viewAllShoppingItems().getOrAwaitValue()
+        dao.insertItem(shoppingItem)
+        val allShoppingItems = dao.viewAllItems().getOrAwaitValue()
         assertThat(allShoppingItems).contains(shoppingItem)
     }
 
@@ -52,9 +52,9 @@ class ShoppingItemDaoTest {
     @Test
     fun deleteShoppingItem() = runBlockingTest {
         val shoppingItem = ShoppingItem("Slippers", 3, 100f, "unavailable, 2")
-        dao.insertShoppingItem(shoppingItem)
-        dao.deleteShoppingItem(shoppingItem)
-        val allShoppingItems = dao.viewAllShoppingItems().getOrAwaitValue()
+        dao.insertItem(shoppingItem)
+        dao.deleteItem(shoppingItem)
+        val allShoppingItems = dao.viewAllItems().getOrAwaitValue()
         assertThat(allShoppingItems).doesNotContain(shoppingItem)
     }
 
@@ -67,8 +67,8 @@ class ShoppingItemDaoTest {
         val appleQty = 2
         val shoppingItem1 = ShoppingItem("Slippers", slipperQty, slipperUnitPrice, "unavailable", 2)
         val shoppingItem2 = ShoppingItem("Apples", appleQty, appleUnitPrice, "unavailable", 3)
-        dao.insertShoppingItem(shoppingItem1)
-        dao.insertShoppingItem(shoppingItem2)
+        dao.insertItem(shoppingItem1)
+        dao.insertItem(shoppingItem2)
         val result = dao.viewTotalPrice().getOrAwaitValue()
         val expectedPrice = (slipperUnitPrice * slipperQty) + (appleUnitPrice * appleQty)
         assertThat(result).isEqualTo(expectedPrice)
